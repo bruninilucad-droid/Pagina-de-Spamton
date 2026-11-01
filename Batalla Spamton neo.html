@@ -74,23 +74,22 @@
             display: flex; flex-direction: column; gap: 8px;
         }
         .personaje .sprite {
-            width: 70px;
-            height: 80px;
+            width: 70px; height: 80px;
             image-rendering: pixelated;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
         }
         .kris .sprite {
-            background-image: url('Kris.png');
+            background-image: url('kris.png');
             animation: idle 1.8s ease-in-out infinite;
         }
         .susie .sprite {
-            background-image: url('Susie.png');
+            background-image: url('susie.png');
             animation: idleSusie 1.5s ease-in-out infinite;
         }
         .ralsei .sprite {
-            background-image: url('Ralsei.png');
+            background-image: url('ralsei.png');
             animation: idleRalsei 2s ease-in-out infinite;
         }
 
@@ -105,62 +104,36 @@
             transform-origin: top center;
         }
         .spamton-sprite {
-            width: 180px;
-            height: 220px;
-            background-image: url('Spamton_NEO_battle_idle.webp');
+            width: 180px; height: 220px;
+            background-image: url('spamton-neo.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            position: relative;
-            z-index: 2;
+            position: relative; z-index: 2;
             animation: spamtonFloat 3s ease-in-out infinite;
             image-rendering: pixelated;
         }
 
         .spamton-hp-flotante {
-            position: absolute;
-            right: 20px;
-            top: -10px;
-            width: 160px;
-            z-index: 40;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.3s, transform 0.3s;
-            pointer-events: none;
+            position: absolute; right: 20px; top: -10px; width: 160px; z-index: 40;
+            opacity: 0; transform: translateY(10px);
+            transition: opacity 0.3s, transform 0.3s; pointer-events: none;
         }
-        .spamton-hp-flotante.mostrar {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .spamton-hp-flotante.mostrar { opacity: 1; transform: translateY(0); }
         .spamton-hp-flotante .nombre {
-            color: #ff00aa;
-            font-size: 11px;
-            text-align: center;
-            margin-bottom: 4px;
+            color: #ff00aa; font-size: 11px; text-align: center; margin-bottom: 4px;
             text-shadow: 0 0 6px #ff00aa;
         }
         .spamton-hp-flotante .barra {
-            width: 100%;
-            height: 12px;
-            background: #222;
-            border: 2px solid #fff;
-            position: relative;
-            overflow: hidden;
+            width: 100%; height: 12px; background: #222; border: 2px solid #fff;
+            position: relative; overflow: hidden;
         }
         .spamton-hp-flotante .relleno {
-            height: 100%;
-            background: #00ff9d;
-            transition: width 0.35s ease;
+            height: 100%; background: #00ff9d; transition: width 0.35s ease;
         }
         .spamton-hp-flotante .daño {
-            position: absolute;
-            top: -24px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ffff00;
-            font-size: 15px;
-            text-shadow: 0 0 6px #000;
-            opacity: 0;
+            position: absolute; top: -24px; left: 50%; transform: translateX(-50%);
+            color: #ffff00; font-size: 15px; text-shadow: 0 0 6px #000; opacity: 0;
         }
 
         .caja-combate {
@@ -178,8 +151,7 @@
             transition: background 0.2s;
         }
         .alma.amarilla {
-            background: #ffff00;
-            box-shadow: 0 0 8px #ffff00;
+            background: #ffff00; box-shadow: 0 0 8px #ffff00;
         }
 
         .proyectil { position: absolute; z-index: 28; }
@@ -234,9 +206,7 @@
         .hp-box { display: flex; align-items: center; gap: 8px; }
         .icono-chico {
             width: 28px; height: 28px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
             image-rendering: pixelated;
         }
         .kris-box .icono-chico   { background-image: url('kris.png'); }
@@ -267,32 +237,25 @@
             color: #ffff00; font-size: 12px; z-index: 60; text-shadow: 0 0 8px #ffff00;
         }
 
-        .pantalla-victoria {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 40px;
-            text-align: center;
+        .pantalla-final {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column; padding: 40px; text-align: center;
         }
-        .pantalla-victoria.mostrar {
-            display: flex;
+        .pantalla-final.mostrar { display: flex; }
+        .pantalla-final p {
+            color: #fff; font-size: 14px; line-height: 1.8; max-width: 700px;
         }
-        .pantalla-victoria p {
-            color: #fff;
-            font-size: 14px;
-            line-height: 1.8;
-            max-width: 700px;
+        .pantalla-final .titulo {
+            font-size: 20px; margin-bottom: 30px;
         }
-        .pantalla-victoria .titulo {
-            color: #ffff00;
-            font-size: 18px;
-            margin-bottom: 30px;
+        .btn-reintentar {
+            margin-top: 25px; padding: 12px 24px;
+            font-family: 'Press Start 2P', cursive; font-size: 12px;
+            cursor: pointer; background: #111; color: #fff;
+            border: 2px solid #fff;
         }
+        .btn-reintentar:hover { background: #ffff00; color: #000; }
     </style>
 </head>
 <body>
@@ -381,12 +344,23 @@
     </div>
 </div>
 
-<div class="pantalla-victoria" id="pantallaVictoria">
-    <div class="titulo">¡GANASTE!</div>
+<!-- Pantalla de Victoria -->
+<div class="pantalla-final" id="pantallaVictoria">
+    <div class="titulo" style="color:#ffff00;">¡GANASTE!</div>
     <p>
         Gracias por jugar esta batalla, no es la batalla real contra el personaje de Spamton.<br><br>
         Si quieres puedes jugar al juego Deltarune, o descargando la demo que incluye el primer y segundo capítulo o comprando el juego que incluye del capítulo 1 al 5 en Steam.
     </p>
+</div>
+
+<!-- Pantalla de Game Over -->
+<div class="pantalla-final" id="pantallaGameOver">
+    <div class="titulo" style="color:#ff4444;">GAME OVER</div>
+    <p>
+        * El equipo ha sido derrotado...<br><br>
+        * Spamton NEO: "HA HA HA... [[YOU LOST]]"
+    </p>
+    <button class="btn-reintentar" onclick="location.reload()">Reintentar</button>
 </div>
 
 <script>
@@ -468,6 +442,15 @@
         document.getElementById("pantallaVictoria").classList.add("mostrar");
     }
 
+    function verificarGameOver() {
+        if (party.kris.hp <= 0 && party.susie.hp <= 0 && party.ralsei.hp <= 0) {
+            batallaTerminada = true;
+            faseEsquivar = false;
+            limpiarTodo();
+            document.getElementById("pantallaGameOver").classList.add("mostrar");
+        }
+    }
+
     function recibirDañoEquipo(dañoTotal) {
         const miembros = ["kris", "susie", "ralsei"];
         const dañoBase = Math.floor(dañoTotal / 3);
@@ -481,6 +464,8 @@
             party[m].hp = Math.max(0, party[m].hp - daño);
             actualizarHP(m);
         });
+
+        verificarGameOver();
     }
 
     function crearProyectil(tipo, x, y, vx = 0, vy = 0) {
@@ -609,7 +594,7 @@
             p.el.style.top = p.y + "px";
 
             if (p.x < almaX + 14 && p.x + 14 > almaX && p.y < almaY + 14 && p.y + 14 > almaY) {
-                recibirDañoEquipo(30);
+                recibirDañoEquipo(15);
                 p.el.remove();
                 proyectiles.splice(i, 1);
                 continue;
@@ -635,10 +620,10 @@
 
         if (turno === "kris") {
             if (accion === "FIGHT") {
-                const d = 10 + Math.floor(Math.random()*15);
+                const d = 20 + Math.floor(Math.random()*15);
                 mostrarDañoSpamton(d);
                 setTexto(`* Kris atacó!<br>* Spamton NEO recibió ${d} de daño.`);
-                setTP(tp + 30);
+                setTP(tp + 10);
             } else if (accion === "ACT") {
                 setTexto(`* Kris eligió ACT...<br>* (Snap / Check / Talk)`);
             } else if (accion === "ITEM") {
@@ -650,13 +635,13 @@
         }
         else if (turno === "susie") {
             if (accion === "FIGHT") {
-                const d = 15 + Math.floor(Math.random()*18);
+                const d = 28 + Math.floor(Math.random()*18);
                 mostrarDañoSpamton(d);
                 setTexto(`* Susie atacó!<br>* ${d} de daño.`);
                 setTP(tp + 12);
             } else if (accion === "MAGIC") {
-                if (tp >= 80) {
-                    setTP(tp - 80);
+                if (tp >= 50) {
+                    setTP(tp - 50);
                     const d = 50 + Math.floor(Math.random()*20);
                     mostrarDañoSpamton(d);
                     setTexto(`* Susie usó RUDE BUSTER!<br>* ¡${d} de daño!`);
@@ -665,19 +650,19 @@
                 setTexto(`* Susie usó un item.`);
             } else if (accion === "DEFEND") {
                 party.susie.defendiendo = true;
-                setTP(tp + 25);
+                setTP(tp + 16);
                 setTexto(`* Susie se defendió!<br>* (Ganó TP y más defensa)`);
             }
             setTimeout(() => pasarTurno("ralsei"), 1000);
         }
         else if (turno === "ralsei") {
             if (accion === "FIGHT") {
-                const d = 5 + Math.floor(Math.random()*10);
+                const d = 12 + Math.floor(Math.random()*10);
                 mostrarDañoSpamton(d);
                 setTexto(`* Ralsei atacó.<br>* ${d} de daño.`);
             } else if (accion === "MAGIC") {
-                if (tp >= 30) {
-                    setTP(tp - 30);
+                if (tp >= 32) {
+                    setTP(tp - 32);
                     party.kris.hp = Math.min(party.kris.max, party.kris.hp + 35);
                     party.susie.hp = Math.min(party.susie.max, party.susie.hp + 35);
                     party.ralsei.hp = Math.min(party.ralsei.max, party.ralsei.hp + 45);
@@ -688,7 +673,7 @@
                 setTexto(`* Ralsei usó un item.`);
             } else if (accion === "DEFEND") {
                 party.ralsei.defendiendo = true;
-                setTP(tp + 25);
+                setTP(tp + 16);
                 setTexto(`* Ralsei se defendió!<br>* (Ganó TP y más defensa)`);
             }
             setTimeout(() => pasarTurno("enemigo"), 1000);
