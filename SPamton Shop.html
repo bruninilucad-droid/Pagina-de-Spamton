@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Spamton Shop - [TIENDA DE SOFTWARE]</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+    
+            body {
+                font-family: 'Segoe UI', system-ui, sans-serif;
+                background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+                color: #e0e0ff;
+                min-height: 100vh;
+                line-height: 1.5;
+            }
+    
+            /* Header */
+            header {
+                background: rgba(0, 0, 0, 0.6);
+                backdrop-filter: blur(10px);
+                padding: 20px 0;
+                text-align: center;
+                border-bottom: 2px solid #7b2cbf;
+                box-shadow: 0 0 20px rgba(123, 44, 191, 0.4);
+            }
+    
+            .logo-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+            }
+    
+            .logo {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                border: 3px solid #9d4edd;
+                box-shadow: 0 0 25px #9d4edd;
+                object-fit: cover;
+                transition: transform 0.3s;
+            }
+    
+            .logo:hover {
+                transform: scale(1.08);
+            }
+    
+            h1 {
+                font-size: 2.8rem;
+                background: linear-gradient(90deg, #c77dff, #7b2cbf, #00f5d4);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                text-shadow: 0 0 30px rgba(199, 125, 255, 0.5);
+                margin-bottom: 5px;
+            }
+    
+            .subtitulo {
+                font-size: 1.3rem;
+                color: #b8b8ff;
+                margin-bottom: 15px;
+            }
+    
+            nav {
+                display: flex;
+                justify-content: center;
+                gap: 25px;
+                flex-wrap: wrap;
+                margin-top: 15px;
+            }
+    
+            nav a {
+                color: #e0e0ff;
+                text-decoration: none;
+                font-weight: 600;
+                padding: 8px 18px;
+                border-radius: 25px;
+                transition: all 0.3s;
+                border: 1px solid transparent;
+            }
+    
+            nav a:hover {
+                background: #7b2cbf;
+                border-color: #c77dff;
+                box-shadow: 0 0 15px #9d4edd;
+            }
+    
+            main {
+                max-width: 1200px;
+                margin: 40px auto;
+                padding: 0 20px;
+            }
+    
+            .bienvenida {
+                text-align: center;
+                margin-bottom: 40px;
+                background: rgba(123, 44, 191, 0.15);
+                padding: 25px;
+                border-radius: 20px;
+                border: 1px solid #7b2cbf;
+            }
+    
+            .bienvenida h2 {
+                font-size: 1.8rem;
+                color: #c77dff;
+                margin-bottom: 10px;
+            }
+    
+            .productos {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 30px;
+                margin-top: 30px;
+            }
+    
+            .producto {
+                background: rgba(20, 15, 40, 0.85);
+                border-radius: 18px;
+                overflow: hidden;
+                border: 1px solid #5a189a;
+                transition: all 0.35s ease;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            }
+    
+            .producto:hover {
+                transform: translateY(-10px);
+                border-color: #c77dff;
+                box-shadow: 0 15px 40px rgba(157, 78, 221, 0.4);
+            }
+    
+            .producto img {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+                border-bottom: 2px solid #7b2cbf;
+            }
+    
+            .producto-info {
+                padding: 20px;
+            }
+    
+            .producto h3 {
+                font-size: 1.35rem;
+                color: #c77dff;
+                margin-bottom: 8px;
+            }
+    
+            .producto p {
+                font-size: 0.95rem;
+                color: #b0b0d0;
+                margin-bottom: 15px;
+                min-height: 50px;
+            }
+    
+            .precio {
+                font-size: 1.4rem;
+                font-weight: bold;
+                color: #00f5d4;
+                margin-bottom: 15px;
+            }
+    
+            .btn {
+                display: inline-block;
+                background: linear-gradient(90deg, #7b2cbf, #9d4edd);
+                color: white;
+                padding: 10px 22px;
+                border-radius: 30px;
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+                text-align: center;
+            }
+    
+            .btn:hover {
+                background: linear-gradient(90deg, #9d4edd, #c77dff);
+                box-shadow: 0 0 20px #c77dff;
+                transform: scale(1.03);
+            }
+    
+            footer {
+                text-align: center;
+                padding: 30px 20px;
+                margin-top: 60px;
+                background: rgba(0, 0, 0, 0.5);
+                border-top: 1px solid #7b2cbf;
+                font-size: 0.95rem;
+                color: #a0a0c0;
+            }
+    
+            footer strong {
+                color: #c77dff;
+            }
+    
+            @media (max-width: 600px) {
+                h1 {
+                    font-size: 2rem;
+                }
+                .logo {
+                    width: 90px;
+                    height: 90px;
+                }
+            }
+
+            /* ===== SPAMTON TOP IMAGE ===== */
+            .spamton-top-image {
+                background: #000;
+                text-align: center;
+                padding: 18px 0 8px 0;
+            }
+
+            .spamton-top-image img {
+                width: 140px;
+                height: 140px;
+                border-radius: 50%;
+                border: 4px solid #ff0;
+                box-shadow: 0 0 25px #ff0, 0 0 50px rgba(255, 255, 0, 0.4);
+                object-fit: cover;
+                transition: transform 0.3s;
+            }
+
+            .spamton-top-image img:hover {
+                transform: scale(1.1) rotate(-3deg);
+            }
+
+
+            .spamton-banner {
+                background: #000;
+                color: #ff0;
+                font-family: "Courier New", Courier, monospace;
+                font-size: 1.15rem;
+                font-weight: bold;
+                padding: 14px 20px;
+                text-align: center;
+                border-top: 3px solid #ff0;
+                border-bottom: 3px solid #ff0;
+                box-shadow: 0 0 18px rgba(255, 255, 0, 0.5);
+                letter-spacing: 1px;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .spamton-banner .cursor {
+                display: inline-block;
+                width: 10px;
+                background: #ff0;
+                animation: blink-cursor 0.7s step-end infinite;
+                margin-left: 2px;
+                vertical-align: middle;
+            }
+
+            @keyframes blink-cursor {
+                50% { opacity: 0; }
+            }
+
+            .spamton-banner #typewriter-text {
+                color: #ff0;
+                text-shadow: 0 0 8px #ff0;
+            }
+
+
+            .spamton-banner a {
+                color: #ff0;
+                text-decoration: underline;
+                font-weight: bold;
+            }
+
+            .spamton-banner a:hover {
+                color: #fff;
+                text-shadow: 0 0 12px #ff0;
+            }
+        </style>
+    </head>
+
+<body>
+
+    <!-- IMAGEN DE SPAMTON ARRIBA DEL BANNER -->
+    <div class="spamton-top-image">
+        <img src="Spamton_Alegre.jpg" 
+             alt="Spamton G. Spamton" 
+             title="¡HEY EVERYBODY!"
+             onerror="this.src='https://via.placeholder.com/140x140/000000/ffff00?text=SPAMTON'">
+    </div>
+
+    <!-- BANNER SPAMTON - Typewriter -->
+    <div class="spamton-banner">
+        <span id="typewriter-text"></span><span class="cursor">█</span>
+    </div>
+
+    <header>
+        <div class="logo-container">
+            
+            <img src="Spamton_face_shop.png" 
+                 alt="Spamton" 
+                 class="logo"
+                 title="Spamton"
+                 onerror="this.src='https://via.placeholder.com/120x120/7b2cbf/ffffff?text=Spanton'">
+            
+            <div>
+                <h1>Spamton Shop</h1>
+                <p class="subtitulo">Tu tienda oficial de [SOFTWARE] y [PROGRAMAS]</p>
+            </div>
+        </div>
+
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#productos">Productos</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="bienvenida" id="inicio">
+            <h2>¡Bienvenidos a [MI TIENDA!]</h2>
+            <p>Hola, soy <strong>[SPAMTON G SPAMTON]</strong>. Aquí encontrarás los mejores [PROGRAMAS] y [SOFTWARE] para tu PC, listos para [DESCARGAR Y POTENCIAR] tu experiencia digital.</p>
+        </section>
+
+        <section id="productos">
+            <h2 style="text-align:center; margin-bottom:10px; color:#c77dff; font-size:2rem;">
+                Software Destacado
+            </h2>
+            <p style="text-align:center; margin-bottom:30px; color:#a0a0c0;">
+                Programas seleccionados por [SPAMTOM] especialmente para [USTED]
+            </p>
+
+            <div class="productos">
+
+                <!-- Producto 1 -->
+                <div class="producto">
+                    <img src="Spamton_Antivirus.jpg"
+                         alt="Spamton Antivirus">
+                    <div class="producto-info">
+                        <h3>Spamton Antivirus Pro</h3>
+                        <p>Protección total en tiempo real. [ESCANEO RAPIDO] y actualizaciones diarias.</p>
+                        <div class="precio">[$ 70000000000000]</div>
+                        <a href="RickRoll'D (1).mp4" class="btn" target="_blank">Comprar ahora</a>
+                    </div>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="producto">
+                    <img src="Spamton_Core.jpg"
+                         alt="Spamton Code">
+                    <div class="producto-info">
+                        <h3>Spamton Code Editor</h3>
+                        <p>Editor de [CODIGO LIGERO], con resaltado de sintaxis y temas personalizados.</p>
+                        <div class="precio">[$ 2]</div>
+                        <a href="Estabamos teniendo una linda cita.mp4" class="btn" target="_blank">Comprar ahora</a>
+                    </div>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="producto">
+                    <img src="Spamton_Officie.jpg" 
+                         alt="Spamton Office">
+                    <div class="producto-info">
+                        <h3>Spamton Office Suite</h3>
+                        <p>Procesador de texto, hojas de cálculo y presentaciones. [TODO EN UNO]</p>
+                        <div class="precio">[$ 60000000000000]</div>
+                        <a href="Collin_video_no_watermark.mp4" class="btn" target="_blank">Comprar ahora</a>
+                    </div>
+                </div>
+
+                <!-- Producto 4 -->
+                <div class="producto">
+                    <img src="Spamton_Games.jpg"
+                         alt="Spamton Games">
+                    <div class="producto-info">
+                        <h3>Spanton Games Pack</h3>
+                        <p>Pack de 12 juegos [INDIE optimizados] para netbooks y PCs modestas.</p>
+                        <div class="precio">[$ 5000000]</div>
+                        <a href="oye compa, soy un buen compa.mp4" class="btn" target="_blank">Comprar ahora</a>
+                    </div>
+                </div>
+
+                <!-- Producto 5 -->
+                <div class="producto">
+                    <img src="Spamtom Desing.jpg" 
+                         alt="Spamton Design">
+                    <div class="producto-info">
+                        <h3>Spamton Design Studio</h3>
+                        <p>Herramienta de diseño [GRAFICO] sencilla y potente. Ideal para principiantes.</p>
+                        <div class="precio">[$ 300]</div>
+                        <a href="SPAMTON G SPAMTON THATS HIS NAME FROM DELTARUNE GAME Drawings by me.mp4" class="btn"  target="_blank">Comprar ahora</a>
+                    </div>
+                </div>
+
+                <!-- Producto 6 -->
+                <div class="producto">
+                    <img src="Spantom VPN.jpg" 
+                         alt="Spamton Security">
+                    <div class="producto-info">
+                        <h3>Spamton VPN Secure</h3>
+                        <p>Navega de forma [PRIVADA] y segura con [SERVIDORES EN ARGENTINA] y Latinoamérica.</p>
+                        <div class="precio">[$ 500000000000000000000 / mes]</div>
+                        <a href="Crees que eres más fuerte que el sueño de una flor.mp4" class="btn"  target="_blank">Comprar ahora</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+
+    <style>
+        .tienda-spamton {
+            Text-align: center;
+            Padding: 40px 20px;
+            Font-family: ‘Press Start 2P’, cursive;
+            Color: #fff;
+        }
+        .titulo-tienda {
+            Color: #ff00aa;
+            Font-size: 22px;
+            Margin-bottom: 10px;
+            Text-shadow: 0 0 10px #ff00aa;
+        }
+        .subtitulo-tienda {
+            Color: #ffff00;
+            Font-size: 12px;
+            Margin-bottom: 40px;
+        }
+        .telefono-container {
+            Display: inline-block;
+            Cursor: pointer;
+            Transition: transform 0.2s;
+            Margin: 30px 0;
+        }
+        .telefono-container:hover {
+            Transform: scale(1.1);
+        }
+        .telefono {
+            Width: 160px;
+            Height: auto;
+            Image-rendering: pixelated;
+            Animation: temblor 0.35s infinite;
+        }
+        @keyframes temblor {
+            0%, 100% { transform: rotate(-4deg); }
+            50% { transform: rotate(4deg); }
+        }
+        .texto-telefono {
+            Color: #00ff9d;
+            Font-size: 14px;
+            Margin-top: 15px;
+            Animation: parpadeo 1s infinite;
+        }
+        @keyframes parpadeo {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .mensaje-spamton {
+            Max-width: 500px;
+            Margin: 30px auto;
+            Padding: 20px;
+            Border: 3px solid #ff00aa;
+            Background: #111;
+            Color: #ffff00;
+            Font-size: 12px;
+            Line-height: 1.7;
+        }
+    </style>
+    
+    <div class=”tienda-spamton”>
+        <h1 class=”titulo-tienda”>SPAMTON’S SHOP</h1>
+        <p class=”subtitulo-tienda”>[[Hyperlink blocked]]</p>
+    
+        <div class=”mensaje-spamton”>
+            * HO HO HO… KRIS!<br>
+            * LOOKS LIKE YOU FOUND MY [[Specil Deal]]!<br>
+            * THERE’S A PHONE RINGING…<br>
+            * MAYBE YOU SHOULD [[Answer it]]?
+        </div>
+    
+        <div class="telefono-container" onclick="irABatalla()">
+            <img src="spamton-telefono.gif" alt="Telefono sonando" class="telefono">
+            <p class="texto-telefono">* Ring... Ring... *</p>
+        </div>
+    
+        <p style="color:#aaa; font-size:11px; margin-top:20px;">
+            (Hace clic en el telefono)
+        </p>
+    </div>
+    
+    <script>
+    function irABatalla() {
+        window.open("Batalla Spamton neo.html", "_blank");
+    }
+    </script>
+    
+
+    <footer id="contacto">
+        <p>© 2026 <strong>[SPAMTON SHOP]</strong> — Todos los derechos reservados</p>
+        <p style="margin-top:8px;">Hecho con amor [POR LA VENTA]. Spamton para la comunidad del spam</p>
+        <p style="margin-top:12px; font-size:0.85rem;">
+            Contacto: <strong>spamton@shop.ar</strong> · Instagram: @spamton.shop 
+        </p>
+    </footer>
+
+<script>
+    // ===== SPAMTON TYPEWRITER EFFECT =====
+    const messages = [
+        "¡COMPRA AHORA!",
+        "[[HYPERLINK BLOCKED]]",
+        'Toca este <a href="Its time to be a BIG SHOT NOWS.mp4" target="_blank">Link</a> para ganar STONKS',
+        "¡OFERTA LIMITADA SOLO HOY!",
+        "¡HAZTE RICO CON SPAMTON!",
+        '¡CLICK <a href="Spamton Canción.mp4" target="_black">Aqui</a> ANTES DE QUE SEA TARDE!',
+        "DEAL OF A LIFETIME [[NOW]]",
+        "¡SOFTWARE PREMIUM A PRECIO DE [SPAM]!",
+        "¡NO TE LO PIERDAS, AMIGO!",
+        "[[SPECIL SPEL]] ¡COMPRA YA!"
+    ];
+
+    const textElement = document.getElementById("typewriter-text");
+    let messageIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typingSpeed = 80;
+    let deletingSpeed = 40;
+    let pauseTime = 1800;
+
+    function typeWriter() {
+        const currentMessage = messages[messageIndex];
+
+        if (!isDeleting) {
+            textElement.innerHTML = currentMessage.substring(0, charIndex + 1);
+            charIndex++;
+
+            if (charIndex === currentMessage.length) {
+                isDeleting = true;
+                setTimeout(typeWriter, pauseTime);
+                return;
+            }
+        } else {
+            textElement.innerHTML = currentMessage.substring(0, charIndex - 1);
+            charIndex--;
+
+            if (charIndex === 0) {
+                isDeleting = false;
+                messageIndex = (messageIndex + 1) % messages.length;
+            }
+        }
+
+        const speed = isDeleting ? deletingSpeed : typingSpeed;
+        setTimeout(typeWriter, speed);
+    }
+
+    typeWriter();
+</script>
+
+<audio id="musicaFondo" loop>
+    <source src="Toby-Fox-Spamton.mp3" type="audio/mpeg">
+    <source src="Toby-Fox-Spamton.ogg" type="audio/ogg">
+</audio>
+
+<script>
+window.addEventListener("load", function() {
+    var musica = document.getElementById("musicaFondo");
+    musica.volume = 0.5;
+
+    var promesa = musica.play();
+    if (promesa !== undefined) {
+        promesa.catch(function() {
+            document.body.addEventListener("click", function() {
+                musica.play();
+            }, { once: true });
+        });
+    }
+});
+</script>
+
+
+
+</body>
+</html>
