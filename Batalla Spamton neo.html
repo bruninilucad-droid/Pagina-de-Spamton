@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Spamton NEO - Batalla</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            user-select: none;
+        }
+        .batalla {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            background: #0d0d15;
+        }
+        .fondo {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, #1a1525 0%, #0d0d15 60%);
+        }
+        .vias {
+            position: absolute; bottom: 180px; left: 0; width: 100%; height: 120px;
+            background: repeating-linear-gradient(90deg, #2a2035 0px, #2a2035 8px, #1a1520 8px, #1a1520 50px);
+            border-top: 4px solid #3d2f4d;
+        }
+
+        @keyframes idle { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+        @keyframes idleSusie { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-5px) rotate(1deg)} }
+        @keyframes idleRalsei { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+        @keyframes spamtonFloat {
+            0%,100%{transform:translateY(0) rotate(-2deg)}
+            25%{transform:translateY(-8px) rotate(1deg)}
+            50%{transform:translateY(-4px) rotate(2deg)}
+            75%{transform:translateY(-10px) rotate(-1deg)}
+        }
+        @keyframes cablesMove {
+            0%,100%{transform:translateX(-50%) rotate(0deg)}
+            50%{transform:translateX(-50%) rotate(3deg)}
+        }
+        @keyframes almaPulse {
+            0%,100%{transform:scale(1)} 50%{transform:scale(1.15)}
+        }
+        @keyframes dañoSube {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-28px); }
+        }
+
+        .tp-container {
+            position: absolute; left: 18px; top: 80px; z-index: 50;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .tp-label {
+            writing-mode: vertical-rl; text-orientation: upright;
+            color: #ff4444; font-size: 14px; letter-spacing: 4px; margin-bottom: 8px;
+        }
+        .tp-bar {
+            width: 16px; height: 220px; background: #1a1a1a;
+            border: 3px solid #fff; position: relative;
+        }
+        .tp-fill {
+            position: absolute; bottom: 0; width: 100%; height: 0%;
+            background: #ff2222; transition: height 0.3s;
+        }
+        .tp-porcentaje { color: #ff4444; font-size: 11px; margin-top: 6px; }
+
+        .equipo {
+            position: absolute; left: 70px; bottom: 220px; z-index: 20;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .personaje .sprite {
+            width: 70px;
+            height: 80px;
+            image-rendering: pixelated;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .kris .sprite {
+            background-image: url('Kris.png');
+            animation: idle 1.8s ease-in-out infinite;
+        }
+        .susie .sprite {
+            background-image: url('Susie.png');
+            animation: idleSusie 1.5s ease-in-out infinite;
+        }
+        .ralsei .sprite {
+            background-image: url('Ralsei.png');
+            animation: idleRalsei 2s ease-in-out infinite;
+        }
+
+        .spamton {
+            position: absolute; right: 120px; top: 60px; z-index: 15; text-align: center;
+        }
+        .cables {
+            position: absolute; top: -40px; left: 50%; width: 4px; height: 50px;
+            background: #00ff66;
+            box-shadow: -25px 0 0 #00ff66, 25px 0 0 #00ff66, -12px 0 0 #00ff66, 12px 0 0 #00ff66;
+            animation: cablesMove 2.5s ease-in-out infinite;
+            transform-origin: top center;
+        }
+        .spamton-sprite {
+            width: 180px;
+            height: 220px;
+            background-image: url('Spamton_NEO_battle_idle.webp');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative;
+            z-index: 2;
+            animation: spamtonFloat 3s ease-in-out infinite;
+            image-rendering: pixelated;
+        }
+
+        .spamton-hp-flotante {
+            position: absolute;
+            right: 20px;
+            top: -10px;
+            width: 160px;
+            z-index: 40;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+        .spamton-hp-flotante.mostrar {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .spamton-hp-flotante .nombre {
+            color: #ff00aa;
+            font-size: 11px;
+            text-align: center;
+            margin-bottom: 4px;
+            text-shadow: 0 0 6px #ff00aa;
+        }
+        .spamton-hp-flotante .barra {
+            width: 100%;
+            height: 12px;
+            background: #222;
+            border: 2px solid #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .spamton-hp-flotante .relleno {
+            height: 100%;
+            background: #00ff9d;
+            transition: width 0.35s ease;
+        }
+        .spamton-hp-flotante .daño {
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffff00;
+            font-size: 15px;
+            text-shadow: 0 0 6px #000;
+            opacity: 0;
+        }
+
+        .caja-combate {
+            position: absolute; top: 250px; left: 50%; transform: translateX(-50%);
+            width: 210px; height: 210px; border: 5px solid #fff;
+            background: #000; z-index: 25; display: none; overflow: hidden;
+        }
+        .caja-combate.activa { display: block; }
+
+        .alma {
+            width: 14px; height: 14px; background: #ff0000;
+            position: absolute; top: 98px; left: 98px;
+            clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 50% 80%, 20% 100%, 0% 35%);
+            animation: almaPulse 0.5s ease-in-out infinite; z-index: 30;
+            transition: background 0.2s;
+        }
+        .alma.amarilla {
+            background: #ffff00;
+            box-shadow: 0 0 8px #ffff00;
+        }
+
+        .proyectil { position: absolute; z-index: 28; }
+        .pipis {
+            width: 18px; height: 22px; background: #fff;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; border: 2px solid #ccc;
+        }
+        .bala { width: 10px; height: 10px; background: #ff00aa; border-radius: 2px; }
+        .diamante {
+            width: 12px; height: 12px; background: #00ffff; transform: rotate(45deg);
+        }
+        .cable-ataque {
+            width: 6px; height: 40px; background: #00ff66; box-shadow: 0 0 6px #00ff66;
+        }
+        .telefono {
+            width: 22px; height: 28px; background: #222;
+            border: 2px solid #fff; border-radius: 4px; position: relative;
+        }
+        .telefono::after {
+            content: ""; position: absolute; top: 4px; left: 4px;
+            width: 12px; height: 8px; background: #0af; border-radius: 2px;
+        }
+        .ojo {
+            width: 16px; height: 16px; background: #ff0;
+            border-radius: 50%; border: 2px solid #fff;
+        }
+        .nariz {
+            width: 8px; height: 18px; background: #fff;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        .boca {
+            width: 20px; height: 12px; background: #f0f;
+            border-radius: 0 0 10px 10px;
+        }
+        .corazon {
+            width: 18px; height: 18px; background: #f00;
+            clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 50% 80%, 20% 100%, 0% 35%);
+        }
+        .disparo {
+            width: 8px; height: 8px; background: #ffff00;
+            border-radius: 50%; box-shadow: 0 0 6px #ffff00;
+        }
+
+        .ui-inferior {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 170px;
+            background: #000; border-top: 4px solid #fff; z-index: 40;
+            padding: 12px 20px 10px;
+        }
+        .fila-hp {
+            display: flex; align-items: center; gap: 25px; margin-bottom: 10px; flex-wrap: wrap;
+        }
+        .hp-box { display: flex; align-items: center; gap: 8px; }
+        .icono-chico {
+            width: 28px; height: 28px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            image-rendering: pixelated;
+        }
+        .kris-box .icono-chico   { background-image: url('kris.png'); }
+        .susie-box .icono-chico  { background-image: url('susie.png'); }
+        .ralsei-box .icono-chico { background-image: url('ralsei.png'); }
+
+        .hp-info { display: flex; flex-direction: column; gap: 2px; }
+        .hp-nombre { font-size: 11px; }
+        .kris-box .hp-nombre   { color: #5dade2; }
+        .susie-box .hp-nombre  { color: #c39bd3; }
+        .ralsei-box .hp-nombre { color: #82e0aa; }
+        .barra-hp { width: 90px; height: 11px; background: #222; border: 2px solid #fff; }
+        .hp-fill { height: 100%; background: #00ff9d; transition: width 0.3s; }
+        .susie-box .hp-fill { background: #ff66cc; }
+        .hp-numeros { font-size: 10px; color: #ccc; }
+        .acciones { display: flex; gap: 6px; margin-left: 8px; }
+        .accion {
+            min-width: 52px; height: 32px; background: #111; border: 2px solid #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; cursor: pointer; color: #fff; padding: 0 6px; transition: 0.15s;
+        }
+        .accion:hover { background: #ffff00; color: #000; transform: scale(1.08); }
+        .dialogo {
+            color: #ffff00; font-size: 13px; margin-top: 6px; min-height: 40px; line-height: 1.5;
+        }
+        .turno-indicador {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            color: #ffff00; font-size: 12px; z-index: 60; text-shadow: 0 0 8px #ffff00;
+        }
+
+        .pantalla-victoria {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 40px;
+            text-align: center;
+        }
+        .pantalla-victoria.mostrar {
+            display: flex;
+        }
+        .pantalla-victoria p {
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.8;
+            max-width: 700px;
+        }
+        .pantalla-victoria .titulo {
+            color: #ffff00;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="batalla">
+    <div class="fondo"></div>
+    <div class="vias"></div>
+    <div class="turno-indicador" id="turnoTexto">Turno de Kris</div>
+
+    <div class="tp-container">
+        <div class="tp-label">TP</div>
+        <div class="tp-bar"><div class="tp-fill" id="tpFill"></div></div>
+        <div class="tp-porcentaje" id="tpTexto">0%</div>
+    </div>
+
+    <div class="equipo">
+        <div class="personaje kris"><div class="sprite"></div></div>
+        <div class="personaje susie"><div class="sprite"></div></div>
+        <div class="personaje ralsei"><div class="sprite"></div></div>
+    </div>
+
+    <div class="spamton">
+        <div class="cables"></div>
+        <div class="spamton-sprite"></div>
+
+        <div class="spamton-hp-flotante" id="spamtonHPFlotante">
+            <div class="nombre">Spamton NEO</div>
+            <div class="barra">
+                <div class="relleno" id="spamtonHPRelleno" style="width: 100%;"></div>
+            </div>
+            <div class="daño" id="spamtonDaño"></div>
+        </div>
+    </div>
+
+    <div class="caja-combate" id="cajaCombate">
+        <div class="alma" id="alma"></div>
+    </div>
+
+    <div class="ui-inferior">
+        <div class="fila-hp">
+            <div class="hp-box kris-box">
+                <div class="icono-chico"></div>
+                <div class="hp-info">
+                    <span class="hp-nombre">KRIS</span>
+                    <div class="barra-hp"><div class="hp-fill" id="hpKris" style="width:100%"></div></div>
+                    <span class="hp-numeros" id="txtKris">120 / 120</span>
+                </div>
+                <div class="acciones" id="accionesKris">
+                    <div class="accion" onclick="elegir('FIGHT')">FIGHT</div>
+                    <div class="accion" onclick="elegir('ACT')">ACT</div>
+                    <div class="accion" onclick="elegir('ITEM')">ITEM</div>
+                    <div class="accion" onclick="elegir('MERCY')">MERCY</div>
+                </div>
+            </div>
+
+            <div class="hp-box susie-box">
+                <div class="icono-chico"></div>
+                <div class="hp-info">
+                    <span class="hp-nombre">SUSIE</span>
+                    <div class="barra-hp"><div class="hp-fill" id="hpSusie" style="width:100%"></div></div>
+                    <span class="hp-numeros" id="txtSusie">140 / 140</span>
+                </div>
+                <div class="acciones" id="accionesSusie" style="display:none;">
+                    <div class="accion" onclick="elegir('FIGHT')">FIGHT</div>
+                    <div class="accion" onclick="elegir('MAGIC')">MAGIC</div>
+                    <div class="accion" onclick="elegir('ITEM')">ITEM</div>
+                    <div class="accion" onclick="elegir('DEFEND')">DEFEND</div>
+                </div>
+            </div>
+
+            <div class="hp-box ralsei-box">
+                <div class="icono-chico"></div>
+                <div class="hp-info">
+                    <span class="hp-nombre">RALSEI</span>
+                    <div class="barra-hp"><div class="hp-fill" id="hpRalsei" style="width:100%"></div></div>
+                    <span class="hp-numeros" id="txtRalsei">100 / 100</span>
+                </div>
+                <div class="acciones" id="accionesRalsei" style="display:none;">
+                    <div class="accion" onclick="elegir('FIGHT')">FIGHT</div>
+                    <div class="accion" onclick="elegir('MAGIC')">MAGIC</div>
+                    <div class="accion" onclick="elegir('ITEM')">ITEM</div>
+                    <div class="accion" onclick="elegir('DEFEND')">DEFEND</div>
+                </div>
+            </div>
+        </div>
+        <div class="dialogo" id="texto">* It's time to be a BIG SHOT!</div>
+    </div>
+</div>
+
+<div class="pantalla-victoria" id="pantallaVictoria">
+    <div class="titulo">¡GANASTE!</div>
+    <p>
+        Gracias por jugar esta batalla, no es la batalla real contra el personaje de Spamton.<br><br>
+        Si quieres puedes jugar al juego Deltarune, o descargando la demo que incluye el primer y segundo capítulo o comprando el juego que incluye del capítulo 1 al 5 en Steam.
+    </p>
+</div>
+
+<script>
+    let tp = 0, turno = "kris", faseEsquivar = false, almaAmarilla = false, batallaTerminada = false;
+    let proyectiles = [];
+    let disparos = [];
+    let puedeDisparar = true;
+
+    const party = {
+        kris:   { hp: 120, max: 120, defensa: 2, defendiendo: false },
+        susie:  { hp: 140, max: 140, defensa: 3, defendiendo: false },
+        ralsei: { hp: 100, max: 100, defensa: 1, defendiendo: false }
+    };
+
+    let spamtonHP = 400;
+    const spamtonHPMax = 400;
+
+    let almaX = 98, almaY = 98;
+    const velocidad = 3.3;
+    const caja = () => document.getElementById("cajaCombate");
+    const almaEl = () => document.getElementById("alma");
+
+    function setTP(v) {
+        tp = Math.max(0, Math.min(100, v));
+        document.getElementById("tpFill").style.height = tp + "%";
+        document.getElementById("tpTexto").innerText = Math.floor(tp) + "%";
+    }
+
+    function actualizarHP(quien) {
+        const p = party[quien];
+        const id = quien.charAt(0).toUpperCase() + quien.slice(1);
+        document.getElementById("hp" + id).style.width = (p.hp / p.max * 100) + "%";
+        document.getElementById("txt" + id).innerText = p.hp + " / " + p.max;
+    }
+
+    function mostrarAcciones(p) {
+        if (batallaTerminada) return;
+        ["Kris","Susie","Ralsei"].forEach(n => document.getElementById("acciones"+n).style.display = "none");
+        document.getElementById("acciones" + p.charAt(0).toUpperCase() + p.slice(1)).style.display = "flex";
+        document.getElementById("turnoTexto").innerText = "Turno de " + p.charAt(0).toUpperCase() + p.slice(1);
+    }
+
+    function setTexto(msg) {
+        document.getElementById("texto").innerHTML = msg;
+    }
+
+    function mostrarDañoSpamton(cantidad) {
+        if (batallaTerminada) return;
+
+        const flotante = document.getElementById("spamtonHPFlotante");
+        const relleno = document.getElementById("spamtonHPRelleno");
+        const textoDaño = document.getElementById("spamtonDaño");
+
+        spamtonHP = Math.max(0, spamtonHP - cantidad);
+        const porcentaje = (spamtonHP / spamtonHPMax) * 100;
+        relleno.style.width = porcentaje + "%";
+
+        textoDaño.innerText = "-" + cantidad;
+        textoDaño.style.animation = "none";
+        void textoDaño.offsetWidth;
+        textoDaño.style.animation = "dañoSube 0.85s ease-out forwards";
+
+        flotante.classList.add("mostrar");
+
+        clearTimeout(window.spamtonHPTimeout);
+        window.spamtonHPTimeout = setTimeout(() => {
+            flotante.classList.remove("mostrar");
+        }, 1400);
+
+        if (spamtonHP <= 0) {
+            ganarBatalla();
+        }
+    }
+
+    function ganarBatalla() {
+        batallaTerminada = true;
+        faseEsquivar = false;
+        limpiarTodo();
+        document.getElementById("pantallaVictoria").classList.add("mostrar");
+    }
+
+    function recibirDañoEquipo(dañoTotal) {
+        const miembros = ["kris", "susie", "ralsei"];
+        const dañoBase = Math.floor(dañoTotal / 3);
+
+        miembros.forEach(m => {
+            let defensaFinal = party[m].defensa;
+            if (party[m].defendiendo) {
+                defensaFinal += 2;
+            }
+            let daño = Math.max(1, dañoBase - defensaFinal);
+            party[m].hp = Math.max(0, party[m].hp - daño);
+            actualizarHP(m);
+        });
+    }
+
+    function crearProyectil(tipo, x, y, vx = 0, vy = 0) {
+        const el = document.createElement("div");
+        el.className = "proyectil " + tipo;
+        el.style.left = x + "px";
+        el.style.top = y + "px";
+        caja().appendChild(el);
+        proyectiles.push({ el, x, y, vx, vy, tipo, vida: 200 });
+    }
+
+    function disparar() {
+        if (!almaAmarilla || !puedeDisparar || !faseEsquivar || batallaTerminada) return;
+        puedeDisparar = false;
+        setTimeout(() => puedeDisparar = true, 180);
+
+        const el = document.createElement("div");
+        el.className = "proyectil disparo";
+        el.style.left = (almaX + 3) + "px";
+        el.style.top = (almaY - 6) + "px";
+        caja().appendChild(el);
+        disparos.push({ el, x: almaX + 3, y: almaY - 6, vy: -6 });
+    }
+
+    function ataquePipis() {
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => crearProyectil("pipis", 20 + Math.random()*170, -20, 0, 2.3), i * 320);
+        }
+    }
+    function ataqueBalas() {
+        for (let f = 0; f < 4; f++) {
+            setTimeout(() => {
+                const y = 25 + f * 45;
+                const dir = f % 2 === 0 ? 1 : -1;
+                for (let i = 0; i < 7; i++) {
+                    setTimeout(() => crearProyectil("bala", dir===1?-10:220, y, dir*3.6, 0), i*110);
+                }
+            }, f * 480);
+        }
+    }
+    function ataqueCara() {
+        setTexto(`* Spamton NEO: "[[LOOK AT MY FACE]]"`);
+        setTimeout(() => {
+            crearProyectil("ojo", 40, 30, 1.5, 2.2);
+            crearProyectil("ojo", 150, 30, -1.5, 2.2);
+        }, 200);
+        setTimeout(() => crearProyectil("nariz", 100, 20, 0, 2.8), 600);
+        setTimeout(() => {
+            for (let i = -2; i <= 2; i++) crearProyectil("boca", 100 + i*25, 40, i*1.2, 2.5);
+        }, 1000);
+        setTimeout(() => {
+            crearProyectil("ojo", 30, 80, 2, 1.5);
+            crearProyectil("ojo", 160, 80, -2, 1.5);
+        }, 1600);
+    }
+    function ataqueCorazon() {
+        setTexto(`* Spamton NEO: "[[MY HEART IS YOURS]]"`);
+        setTimeout(() => crearProyectil("corazon", 95, 95, 0, 0), 100);
+        setTimeout(() => {
+            for (let i = 0; i < 12; i++) {
+                const ang = (i / 12) * Math.PI * 2;
+                crearProyectil("diamante", 100, 100, Math.cos(ang)*2.8, Math.sin(ang)*2.8);
+            }
+        }, 700);
+        setTimeout(() => {
+            for (let i = 0; i < 8; i++) {
+                const ang = (i / 8) * Math.PI * 2 + 0.4;
+                crearProyectil("diamante", 100, 100, Math.cos(ang)*3.2, Math.sin(ang)*3.2);
+            }
+        }, 1400);
+    }
+    function ataqueTelefono() {
+        setTexto(`* Spamton NEO: "[[RING RING]] IT'S FOR YOU!"`);
+        for (let i = 0; i < 6; i++) {
+            setTimeout(() => {
+                crearProyectil("telefono", 20 + Math.random()*170, -30, (Math.random()-0.5)*1.5, 2.0);
+            }, i * 400);
+        }
+        setTimeout(() => {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    crearProyectil("bala", 30 + i*35, 0, 0, 3.5);
+                    crearProyectil("bala", 30 + i*35, 210, 0, -3.5);
+                }, i * 150);
+            }
+        }, 2200);
+    }
+
+    function elegirAtaque() {
+        if (batallaTerminada) return;
+        const lista = [ataquePipis, ataqueBalas, ataqueCara, ataqueCorazon, ataqueTelefono];
+        lista[Math.floor(Math.random() * lista.length)]();
+    }
+
+    function actualizarProyectiles() {
+        if (!faseEsquivar || batallaTerminada) return;
+
+        for (let i = disparos.length - 1; i >= 0; i--) {
+            const d = disparos[i];
+            d.y += d.vy;
+            d.el.style.top = d.y + "px";
+
+            for (let j = proyectiles.length - 1; j >= 0; j--) {
+                const p = proyectiles[j];
+                if (Math.abs(d.x - p.x) < 14 && Math.abs(d.y - p.y) < 14) {
+                    d.el.remove();
+                    p.el.remove();
+                    disparos.splice(i, 1);
+                    proyectiles.splice(j, 1);
+                    setTP(tp + 2);
+                    break;
+                }
+            }
+            if (d.y < -20) {
+                d.el.remove();
+                disparos.splice(i, 1);
+            }
+        }
+
+        for (let i = proyectiles.length - 1; i >= 0; i--) {
+            const p = proyectiles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vida--;
+            p.el.style.left = p.x + "px";
+            p.el.style.top = p.y + "px";
+
+            if (p.x < almaX + 14 && p.x + 14 > almaX && p.y < almaY + 14 && p.y + 14 > almaY) {
+                recibirDañoEquipo(30);
+                p.el.remove();
+                proyectiles.splice(i, 1);
+                continue;
+            }
+            if (p.vida <= 0 || p.x < -40 || p.x > 250 || p.y < -40 || p.y > 250) {
+                p.el.remove();
+                proyectiles.splice(i, 1);
+            }
+        }
+    }
+
+    function limpiarTodo() {
+        proyectiles.forEach(p => p.el.remove());
+        disparos.forEach(d => d.el.remove());
+        proyectiles = [];
+        disparos = [];
+    }
+
+    function elegir(accion) {
+        if (faseEsquivar || batallaTerminada) return;
+
+        party.kris.defendiendo = party.susie.defendiendo = party.ralsei.defendiendo = false;
+
+        if (turno === "kris") {
+            if (accion === "FIGHT") {
+                const d = 10 + Math.floor(Math.random()*15);
+                mostrarDañoSpamton(d);
+                setTexto(`* Kris atacó!<br>* Spamton NEO recibió ${d} de daño.`);
+                setTP(tp + 30);
+            } else if (accion === "ACT") {
+                setTexto(`* Kris eligió ACT...<br>* (Snap / Check / Talk)`);
+            } else if (accion === "ITEM") {
+                setTexto(`* Usaste un item.`);
+            } else if (accion === "MERCY") {
+                setTexto(`* Intentaste MERCY...<br>* Spamton: "NO HAY [[SALIDA]]"`);
+            }
+            setTimeout(() => pasarTurno("susie"), 1000);
+        }
+        else if (turno === "susie") {
+            if (accion === "FIGHT") {
+                const d = 15 + Math.floor(Math.random()*18);
+                mostrarDañoSpamton(d);
+                setTexto(`* Susie atacó!<br>* ${d} de daño.`);
+                setTP(tp + 12);
+            } else if (accion === "MAGIC") {
+                if (tp >= 80) {
+                    setTP(tp - 80);
+                    const d = 50 + Math.floor(Math.random()*20);
+                    mostrarDañoSpamton(d);
+                    setTexto(`* Susie usó RUDE BUSTER!<br>* ¡${d} de daño!`);
+                } else { setTexto(`* No hay suficiente TP.`); return; }
+            } else if (accion === "ITEM") {
+                setTexto(`* Susie usó un item.`);
+            } else if (accion === "DEFEND") {
+                party.susie.defendiendo = true;
+                setTP(tp + 25);
+                setTexto(`* Susie se defendió!<br>* (Ganó TP y más defensa)`);
+            }
+            setTimeout(() => pasarTurno("ralsei"), 1000);
+        }
+        else if (turno === "ralsei") {
+            if (accion === "FIGHT") {
+                const d = 5 + Math.floor(Math.random()*10);
+                mostrarDañoSpamton(d);
+                setTexto(`* Ralsei atacó.<br>* ${d} de daño.`);
+            } else if (accion === "MAGIC") {
+                if (tp >= 30) {
+                    setTP(tp - 30);
+                    party.kris.hp = Math.min(party.kris.max, party.kris.hp + 35);
+                    party.susie.hp = Math.min(party.susie.max, party.susie.hp + 35);
+                    party.ralsei.hp = Math.min(party.ralsei.max, party.ralsei.hp + 45);
+                    actualizarHP("kris"); actualizarHP("susie"); actualizarHP("ralsei");
+                    setTexto(`* Ralsei usó Heal Prayer!`);
+                } else { setTexto(`* No hay suficiente TP.`); return; }
+            } else if (accion === "ITEM") {
+                setTexto(`* Ralsei usó un item.`);
+            } else if (accion === "DEFEND") {
+                party.ralsei.defendiendo = true;
+                setTP(tp + 25);
+                setTexto(`* Ralsei se defendió!<br>* (Ganó TP y más defensa)`);
+            }
+            setTimeout(() => pasarTurno("enemigo"), 1000);
+        }
+    }
+
+    function pasarTurno(sig) {
+        if (batallaTerminada) return;
+        turno = sig;
+        if (sig === "enemigo") {
+            document.getElementById("turnoTexto").innerText = "¡Spamton NEO ataca!";
+            iniciarEsquivar();
+        } else {
+            mostrarAcciones(sig);
+        }
+    }
+
+    function iniciarEsquivar() {
+        if (batallaTerminada) return;
+        faseEsquivar = true;
+        almaAmarilla = true;
+        almaEl().classList.add("amarilla");
+        caja().classList.add("activa");
+
+        document.getElementById("accionesKris").style.display = "none";
+        document.getElementById("accionesSusie").style.display = "none";
+        document.getElementById("accionesRalsei").style.display = "none";
+
+        setTexto(`* ¡El alma se volvió amarilla!<br>* Dispará con Z / Enter / Espacio`);
+
+        elegirAtaque();
+        setTimeout(() => elegirAtaque(), 2000);
+        setTimeout(() => elegirAtaque(), 4000);
+
+        setTimeout(() => {
+            if (batallaTerminada) return;
+            faseEsquivar = false;
+            almaAmarilla = false;
+            almaEl().classList.remove("amarilla");
+            limpiarTodo();
+            caja().classList.remove("activa");
+            setTexto(`* El ataque terminó.`);
+            setTimeout(() => {
+                pasarTurno("kris");
+                mostrarAcciones("kris");
+            }, 800);
+        }, 6200);
+    }
+
+    const teclas = {};
+    window.addEventListener("keydown", e => {
+        teclas[e.key.toLowerCase()] = true;
+        if (["z", "enter", " "].includes(e.key.toLowerCase())) {
+            e.preventDefault();
+            disparar();
+        }
+    });
+    window.addEventListener("keyup", e => teclas[e.key.toLowerCase()] = false);
+
+    function loop() {
+        if (faseEsquivar && !batallaTerminada) {
+            if (teclas["arrowup"] || teclas["w"]) almaY = Math.max(0, almaY - velocidad);
+            if (teclas["arrowdown"] || teclas["s"]) almaY = Math.min(196, almaY + velocidad);
+            if (teclas["arrowleft"] || teclas["a"]) almaX = Math.max(0, almaX - velocidad);
+            if (teclas["arrowright"] || teclas["d"]) almaX = Math.min(196, almaX + velocidad);
+            almaEl().style.left = almaX + "px";
+            almaEl().style.top = almaY + "px";
+            actualizarProyectiles();
+        }
+        requestAnimationFrame(loop);
+    }
+
+    setTP(0);
+    mostrarAcciones("kris");
+    loop();
+</script>
+</body>
+</html>
